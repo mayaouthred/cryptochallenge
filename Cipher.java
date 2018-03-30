@@ -24,6 +24,7 @@ public class Cipher {
 		String word = input.next();
 		int wordLength = word.length();
 		ArrayList<ArrayList<Integer>> repeats = new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<Integer>> differences = new ArrayList<ArrayList<Integer>>();
 		for (int i = 0; i < wordLength; i++) {
 			for (int j = i + 1; j < wordLength; j++) {
 				if (word.charAt(i) == word.charAt(j)) {
@@ -31,10 +32,15 @@ public class Cipher {
 					repeat.add(i);
 					repeat.add(j);
 					repeats.add(repeat);
+				} else {
+					ArrayList<Integer> difference = new ArrayList<Integer>();
+					difference.add(i);
+					difference.add(j);
+					differences.add(difference);
 				}
 			}
 		}
-		ArrayList<Key> possibilities = possibilities(repeats, wordLength, word);
+		ArrayList<Key> possibilities = possibilities(repeats, differences, wordLength, word);
 		for (int i = 0; i < possibilities.size(); i++) {
 			for (int j = 0; j < 26; j++) {
 				output.print(possibilities.get(i).toArray()[j] + " ");
@@ -46,8 +52,8 @@ public class Cipher {
 		output.close();
 	}
 
-	public static ArrayList<Key> possibilities(
-			ArrayList<ArrayList<Integer>> repeats, int wordLength, String word) {
+	public static ArrayList<Key> possibilities(ArrayList<ArrayList<Integer>> repeats,
+			ArrayList<ArrayList<Integer>> differences, int wordLength, String word) {
 		ArrayList<Key> possibilities = new ArrayList<Key>();
 		String wordPossibility;
 		for (int i = 0; i < words.length; i++) {
@@ -62,63 +68,71 @@ public class Cipher {
 						valid = false;
 					}
 				}
+				for (int j = 0; j < differences.size(); j++) {
+					if (wordPossibility.charAt(differences.get(j).get(0)) == wordPossibility
+							.charAt(differences.get(j).get(1))) {
+						valid = false;
+					}
+				}
 			}
 			if (valid) {
 				System.out.println(wordPossibility);
 				Key key = new Key();
 				for (int j = 0; j < word.length(); j++) {
-					if (word.charAt(j) == 'a' || word.charAt(j) == 'A') {
-						key.setA(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'b' || word.charAt(j) == 'B') {
-						key.setB(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'c' || word.charAt(j) == 'C') {
-						key.setC(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'd' || word.charAt(j) == 'D') {
-						key.setD(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'e' || word.charAt(j) == 'E') {
-						key.setE(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'f' || word.charAt(j) == 'F') {
-						key.setF(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'g' || word.charAt(j) == 'G') {
-						key.setG(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'h' || word.charAt(j) == 'H') {
-						key.setH(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'i' || word.charAt(j) == 'I') {
-						key.setI(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'j' || word.charAt(j) == 'J') {
-						key.setJ(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'k' || word.charAt(j) == 'K') {
-						key.setK(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'l' || word.charAt(j) == 'L') {
-						key.setL(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'm' || word.charAt(j) == 'M') {
-						key.setM(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'n' || word.charAt(j) == 'N') {
-						key.setN(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'o' || word.charAt(j) == 'O') {
-						key.setO(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'p' || word.charAt(j) == 'P') {
-						key.setP(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'q' || word.charAt(j) == 'Q') {
-						key.setQ(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'r' || word.charAt(j) == 'R') {
-						key.setR(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 's' || word.charAt(j) == 'S') {
-						key.setS(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 't' || word.charAt(j) == 'T') {
-						key.setT(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'u' || word.charAt(j) == 'U') {
-						key.setU(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'v' || word.charAt(j) == 'V') {
-						key.setV(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'w' || word.charAt(j) == 'W') {
-						key.setW(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'x' || word.charAt(j) == 'X') {
-						key.setX(wordPossibility.charAt(j));
-					} else if (word.charAt(j) == 'y' || word.charAt(j) == 'Y') {
-						key.setY(wordPossibility.charAt(j));
+					char c = word.charAt(j);
+					char c2 = wordPossibility.charAt(j);
+					if (c == 'a' || c == 'A') {
+						key.setA(c2);
+					} else if (c == 'b' || c == 'B') {
+						key.setB(c2);
+					} else if (c == 'c' || c == 'C') {
+						key.setC(c2);
+					} else if (c == 'd' || c == 'D') {
+						key.setD(c2);
+					} else if (c == 'e' || c == 'E') {
+						key.setE(c2);
+					} else if (c == 'f' || c == 'F') {
+						key.setF(c2);
+					} else if (c == 'g' || c == 'G') {
+						key.setG(c2);
+					} else if (c == 'h' || c == 'H') {
+						key.setH(c2);
+					} else if (c == 'i' || c == 'I') {
+						key.setI(c2);
+					} else if (c == 'j' || c == 'J') {
+						key.setJ(c2);
+					} else if (c == 'k' || c == 'K') {
+						key.setK(c2);
+					} else if (c == 'l' || c == 'L') {
+						key.setL(c2);
+					} else if (c == 'm' || c == 'M') {
+						key.setM(c2);
+					} else if (c == 'n' || c == 'N') {
+						key.setN(c2);
+					} else if (c == 'o' || c == 'O') {
+						key.setO(c2);
+					} else if (c == 'p' || c == 'P') {
+						key.setP(c2);
+					} else if (c == 'q' || c == 'Q') {
+						key.setQ(c2);
+					} else if (c == 'r' || c == 'R') {
+						key.setR(c2);
+					} else if (c == 's' || c == 'S') {
+						key.setS(c2);
+					} else if (c == 't' || c == 'T') {
+						key.setT(c2);
+					} else if (c == 'u' || c == 'U') {
+						key.setU(c2);
+					} else if (c == 'v' || c == 'V') {
+						key.setV(c2);
+					} else if (c == 'w' || c == 'W') {
+						key.setW(c2);
+					} else if (c == 'x' || c == 'X') {
+						key.setX(c2);
+					} else if (c == 'y' || c == 'Y') {
+						key.setY(c2);
 					} else {
-						key.setZ(wordPossibility.charAt(j));
+						key.setZ(c2);
 					}
 				}
 				possibilities.add(key);
